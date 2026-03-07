@@ -21,6 +21,11 @@ import { WebExtCookies } from 'webext-cookies';
 const cookie = await WebExtCookies.get({ name: 'session', url: 'https://example.com' });
 ```
 
+
+## License
+
+MIT
+
 ---
 
 Built by [theluckystrike](https://github.com/theluckystrike) — [zovo.one](https://zovo.one)

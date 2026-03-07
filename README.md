@@ -21,7 +21,6 @@ import { WebExtCookies } from 'webext-cookies';
 const cookie = await WebExtCookies.get({ name: 'session', url: 'https://example.com' });
 ```
 
-
 ## License
 
 MIT

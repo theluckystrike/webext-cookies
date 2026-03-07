@@ -10,13 +10,13 @@ Promise-based wrapper for Chrome Cookies API.
 ## Installation
 
 ```bash
-npm install webext-cookies
+npm install @theluckystrike/webext-cookies
 ```
 
 ## Usage
 
 ```typescript
-import { WebExtCookies } from 'webext-cookies';
+import { WebExtCookies } from '@theluckystrike/webext-cookies';
 
 const cookie = await WebExtCookies.get({ name: 'session', url: 'https://example.com' });
 ```

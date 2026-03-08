@@ -1,24 +1,38 @@
 {
-  "name": "webext-cookies",
+  "name": "@zovo/webext-cookies",
   "version": "1.0.0",
-  "description": "",
+  "description": "Promise-based, fully typed wrapper for the Chrome Cookies API",
   "main": "./dist/index.js",
   "scripts": {
     "test": "vitest run",
     "build": "tsc",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/theluckystrike/webext-cookies.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "chrome",
+    "cookies",
+    "browser-extension",
+    "manifest-v3",
+    "npm-package",
+    "promise",
+    "typescript",
+    "zovo"
+  ],
+  "author": "theluckystrike",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/theluckystrike/webext-cookies/issues"
   },
   "homepage": "https://github.com/theluckystrike/webext-cookies#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false,
   "devDependencies": {
     "@types/chrome": "^0.1.37",
     "typescript": "^5.9.3",

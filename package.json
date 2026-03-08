@@ -1,7 +1,7 @@
 {
   "name": "@zovo/webext-cookies",
   "version": "1.0.0",
-  "description": "Promise-based, fully typed wrapper for the Chrome Cookies API",
+  "description": "Promise-based, fully typed wrapper for the Chrome Cookies API — get, set, remove, and watch cookies. Part of @zovo/webext.",
   "main": "./dist/index.js",
   "scripts": {
     "test": "vitest run",

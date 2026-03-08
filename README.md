@@ -6,7 +6,7 @@
 
 # @zovo/webext-cookies
 
-Promise-based, fully typed wrapper for the Chrome Cookies API.
+Promise-based, fully typed wrapper for the Chrome Cookies API — get, set, remove, and watch cookies. Part of @zovo/webext.
 
 ## Why @zovo/webext-cookies?
 

@@ -1,75 +1,84 @@
-# Contributing to @zovo/webext-cookies
+# Contributing to webext-cookies
 
 Thank you for your interest in contributing! This guide will help you get started.
 
 ## Development Setup
 
-### 1. Fork the Repository
+1. **Fork the repository** on GitHub
+2. **Clone your fork:**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/webext-cookies.git
+   cd webext-cookies
+   ```
 
-Click the "Fork" button on the [GitHub repository](https://github.com/theluckystrike/webext-cookies).
+3. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
 
-### 2. Clone Your Fork
-
-```bash
-git clone https://github.com/YOUR_USERNAME/webext-cookies.git
-cd webext-cookies
-```
-
-### 3. Install Dependencies
-
-We use pnpm for package management:
-
-```bash
-npm install -g pnpm  # if you don't have pnpm installed
-pnpm install
-```
-
-### 4. Create a Feature Branch
-
-```bash
-git checkout -b feature/your-feature-name
-# or
-git checkout -b fix/bug-description
-```
+   This project uses [pnpm](https://pnpm.io/) for package management.
 
 ## Development Workflow
 
-### Running Tests
+1. **Create a feature branch:**
+   ```bash
+   git checkout -b feature/your-feature-name
+   # or
+   git checkout -b fix/bug-description
+   ```
 
-```bash
-pnpm test
-```
+2. **Make your changes** — ensure your code follows the existing style
 
-### Building
+3. **Run tests:**
+   ```bash
+   pnpm test
+   ```
 
-```bash
-pnpm build
-```
+   We use [Vitest](https://vitest.dev/) for testing.
 
-### Type Checking
+4. **Build the project:**
+   ```bash
+   pnpm build
+   ```
 
-```bash
-pnpm typecheck
-```
-
-## Pull Request Checklist
-
-Before submitting your PR, ensure:
-
-- [ ] Tests pass (`pnpm test`)
-- [ ] Code builds without errors (`pnpm build`)
-- [ ] TypeScript types are correct
-- [ ] New exports are properly typed
-- [ ] README is updated if adding new public methods
-- [ ] Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/)
+   This compiles TypeScript to JavaScript in the `dist/` directory.
 
 ## Code Style
 
-- Use TypeScript with strict mode
-- Follow existing code conventions
+- Use TypeScript for all new code
+- Follow the existing code formatting (Prettier/ESLint if configured)
 - Add JSDoc comments for public APIs
 - Write tests for new functionality
 
-## Questions?
+## Commit Messages
 
-If you have questions, feel free to open an issue or reach out via [GitHub Discussions](https://github.com/theluckystrike/webext-cookies/discussions).
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `feat:` — new feature
+- `fix:` — bug fix
+- `docs:` — documentation changes
+- `refactor:` — code refactoring
+- `test:` — adding/updating tests
+
+Example:
+```
+feat: add getAllCookieStores method
+```
+
+## Pull Request Process
+
+1. Update documentation if needed
+2. Ensure all tests pass (`pnpm test`)
+3. Ensure the build succeeds (`pnpm build`)
+4. Push your branch to your fork
+5. Open a Pull Request against the `main` branch
+6. Fill out the PR template with all relevant details
+
+## Getting Help
+
+- Open an [Issue](https://github.com/theluckystrike/webext-cookies/issues) for bugs or feature requests
+- Check existing issues before creating new ones
+
+## License
+
+By contributing, you agree that your contributions will be licensed under the MIT License.

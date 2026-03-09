@@ -1,27 +1,27 @@
 {
-  "name": "@zovo/webext-cookies",
+  "name": "@theluckystrike/webext-cookies",
   "version": "1.0.0",
   "description": "Promise-based, fully typed wrapper for the Chrome Cookies API — get, set, remove, and watch cookies. Part of @zovo/webext.",
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "scripts": {
     "test": "vitest run",
     "build": "tsc",
-    "prepare": "npm run build",
-    "typecheck": "tsc --noEmit"
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/theluckystrike/webext-cookies.git"
   },
   "keywords": [
-    "chrome",
-    "cookies",
+    "chrome-extension",
     "browser-extension",
+    "cookies",
     "manifest-v3",
     "npm-package",
     "promise",
     "typed",
-    "typescript",
+    "webext",
     "zovo"
   ],
   "author": "theluckystrike",
@@ -30,14 +30,13 @@
     "url": "https://github.com/theluckystrike/webext-cookies/issues"
   },
   "homepage": "https://github.com/theluckystrike/webext-cookies#readme",
-  "engines": {
-    "node": ">=18"
-  },
-  "sideEffects": false,
   "devDependencies": {
     "@types/chrome": "^0.1.37",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
+  },
+  "peerDependencies": {
+    "@types/chrome": ">=0.0.260"
   },
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -46,11 +45,19 @@
     "README.md",
     "LICENSE"
   ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   }
 }

@@ -1,29 +1,39 @@
-<div align="center">
-
-# @zovo/webext-cookies
-
-Promise-based, fully typed wrapper for the Chrome Cookies API. Get, set, remove, and watch cookies with async/await.
-
-[![npm version](https://img.shields.io/npm/v/@zovo/webext-cookies)](https://www.npmjs.com/package/@zovo/webext-cookies)
-[![npm downloads](https://img.shields.io/npm/dm/@zovo/webext-cookies)](https://www.npmjs.com/package/@zovo/webext-cookies)
+[![CI](https://github.com/theluckystrike/webext-cookies/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-cookies/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@zovo/webext-cookies)](https://www.npmjs.com/package/@zovo/webext-cookies)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@zovo/webext-cookies)
 
-[Installation](#installation) · [Quick Start](#quick-start) · [API](#api) · [License](#license)
+# @zovo/webext-cookies
 
-</div>
+Promise-based, fully typed wrapper for the Chrome Cookies API — get, set, remove, and watch cookies. Part of @zovo/webext.
 
----
+## Why @zovo/webext-cookies?
 
-## Features
+The raw `chrome.cookies` API has several pain points:
 
-- **Promise-based** -- async/await for all cookie operations
-- **Fully typed** -- TypeScript generics for cookie details and responses
-- **CRUD operations** -- `get`, `getAll`, `set`, `remove`
-- **Cookie stores** -- enumerate all cookie stores
-- **Change listeners** -- subscribe to cookie changes with `onChanged`
-- **Zero dependencies** -- just TypeScript and the Chrome API
+- **Callback-based**: Uses old-school callbacks instead of modern Promises
+- **Untyped**: No TypeScript support out of the box
+- **Verbose**: Requires boilerplate for every API call
+- **Error-prone**: Easy to make mistakes with cookie details
+
+`@zovo/webext-cookies` solves all these issues:
+
+```typescript
+// ❌ Raw chrome.cookies API (verbose, callback-based, untyped)
+chrome.cookies.get({ name: 'session', url: 'https://example.com' }, (cookie) => {
+  if (chrome.runtime.lastError) {
+    console.error(chrome.runtime.lastError);
+    return;
+  }
+  console.log(cookie);
+});
+
+// ✅ @zovo/webext-cookies (clean, Promise-based, fully typed)
+import { WebExtCookies } from '@zovo/webext-cookies';
+
+const cookie = await WebExtCookies.get({ name: 'session', url: 'https://example.com' });
+```
 
 ## Installation
 
@@ -31,90 +41,95 @@ Promise-based, fully typed wrapper for the Chrome Cookies API. Get, set, remove,
 npm install @zovo/webext-cookies
 ```
 
-<details>
-<summary>Other package managers</summary>
+Or with pnpm:
 
 ```bash
 pnpm add @zovo/webext-cookies
-# or
-yarn add @zovo/webext-cookies
 ```
 
-</details>
+Or with yarn:
+
+```bash
+yarn add @zovo/webext-cookies
+```
 
 ## Quick Start
 
 ```typescript
-import { WebExtCookies } from "@zovo/webext-cookies";
+import { WebExtCookies } from '@zovo/webext-cookies';
 
-const session = await WebExtCookies.get({ name: "session", url: "https://example.com" });
-const all = await WebExtCookies.getAll({ domain: ".example.com" });
+// Get a single cookie by name and URL
+const session = await WebExtCookies.get({ name: 'session', url: 'https://example.com' });
 
-await WebExtCookies.set({
-  name: "prefs",
-  value: "dark-mode=true",
-  url: "https://example.com",
+// Get all cookies for a domain
+const cookies = await WebExtCookies.getAll({ domain: '.example.com' });
+
+// Set a new cookie
+const newCookie = await WebExtCookies.set({
+  name: 'preferences',
+  value: 'dark-mode=true',
+  url: 'https://example.com',
+  expirationDate: Math.floor(Date.now() / 1000) + 86400 * 30, // 30 days
   secure: true,
+  sameSite: 'strict'
 });
 
-await WebExtCookies.remove({ name: "session", url: "https://example.com" });
+// Remove a cookie
+await WebExtCookies.remove({ name: 'session', url: 'https://example.com' });
 
-WebExtCookies.onChanged((info) => {
-  console.log(info.removed ? "removed" : "changed", info.cookie.name);
+// Listen for cookie changes
+WebExtCookies.onChanged((changeInfo) => {
+  console.log(`Cookie ${changeInfo.removed ? 'removed' : 'changed'}:`, changeInfo.cookie.name);
 });
+
+// Remove listener when done
+const listener = (changeInfo: chrome.cookies.CookieChangeInfo) => {};
+WebExtCookies.onChanged(listener);
+WebExtCookies.offChanged(listener);
 ```
 
-## API
+## API Reference
 
-| Method | Description |
-|--------|-------------|
-| `get(details)` | Retrieve a single cookie by name and URL |
-| `getAll(details?)` | Retrieve all matching cookies |
-| `set(details)` | Set a cookie |
-| `remove(details)` | Delete a cookie by name and URL |
-| `getAllCookieStores()` | List all cookie stores |
-| `onChanged(callback)` | Listen for cookie changes |
-| `offChanged(callback)` | Remove a change listener |
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `get` | `get(details: { name: string; url: string; storeId?: string })` | Retrieves a single cookie by name and URL |
+| `getAll` | `getAll(details?: chrome.cookies.GetAllDetails)` | Retrieves all cookies matching the given details |
+| `set` | `set(details: chrome.cookies.SetDetails)` | Sets a cookie with the given details |
+| `remove` | `remove(details: { name: string; url: string; storeId?: string })` | Deletes a cookie by name and URL |
+| `getAllCookieStores` | `getAllCookieStores()` | Lists all existing cookie stores |
+| `onChanged` | `onChanged(callback: (changeInfo: chrome.cookies.CookieChangeInfo) => void)` | Registers a listener for cookie changes |
+| `offChanged` | `offChanged(callback: (changeInfo: chrome.cookies.CookieChangeInfo) => void)` | Removes a cookie change listener |
 
 ## Permissions
 
+This library requires the `cookies` permission and host permissions in your `manifest.json`:
+
 ```json
 {
-  "permissions": ["cookies"],
-  "host_permissions": ["*://*.example.com/"]
+  "permissions": [
+    "cookies"
+  ],
+  "host_permissions": [
+    "*://*.example.com/"
+  ]
 }
 ```
 
+The `url` parameter in cookie methods must match a host permission.
+
 ## Part of @zovo/webext
 
-This package is part of the [@zovo/webext](https://github.com/theluckystrike) family -- typed, modular utilities for Chrome extension development:
+`@zovo/webext-cookies` is part of the @zovo/webext family of libraries for browser extension development:
 
-| Package | Description |
-|---------|-------------|
-| [webext-storage](https://github.com/theluckystrike/webext-storage) | Typed storage with schema validation |
-| [webext-messaging](https://github.com/theluckystrike/webext-messaging) | Type-safe message passing |
-| [webext-tabs](https://github.com/theluckystrike/webext-tabs) | Tab query helpers |
-| [webext-cookies](https://github.com/theluckystrike/webext-cookies) | Promise-based cookies API |
-| [webext-i18n](https://github.com/theluckystrike/webext-i18n) | Internationalization toolkit |
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- [@zovo/webext-cookies](https://github.com/theluckystrike/webext-cookies) — Cookies API
+- [@zovo/webext-storage](https://github.com/theluckystrike/webext-storage) — Storage API
+- [@zovo/webext-tabs](https://github.com/theluckystrike/webext-tabs) — Tabs API
+- [@zovo/webext-runtime](https://github.com/theluckystrike/webext-runtime) — Runtime API
 
 ## License
 
-MIT License -- see [LICENSE](LICENSE) for details.
+MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-<div align="center">
-
-Built by [theluckystrike](https://github.com/theluckystrike) · [zovo.one](https://zovo.one)
-
-</div>
+Built with ❤️ by [theluckystrike](https://github.com/theluckystrike) — [zovo.one](https://zovo.one)

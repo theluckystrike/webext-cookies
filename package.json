@@ -20,6 +20,7 @@
     "manifest-v3",
     "npm-package",
     "promise",
+    "typed",
     "typescript",
     "zovo"
   ],
